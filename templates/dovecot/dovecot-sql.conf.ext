@@ -1,0 +1,12 @@
+#dovecot-sql.conf.ext
+
+driver = mysql
+connect = host=127.0.0.1 dbname=vmail user=vmail password=vmailpasswort
+default_pass_scheme = SHA512-CRYPT
+
+password_query = \
+SELECT username, domain, password \
+FROM users WHERE username = '%n' AND domain = '%d'
+
+# For using doveadm -A:
+iterate_query = SELECT userid AS username, domain FROM users

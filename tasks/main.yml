@@ -1,0 +1,14 @@
+---
+
+# main tasks file for postfix-mta
+
+- name: postfix-mta
+  debug: msg="postfix-mta"
+
+- include: mysql.yml
+  when: postfix_mta_db == 'mysql'
+- include: pgsql.yml
+  when: postfix_mta_db == 'pgsql'
+- include: dovecot.yml
+- include: postfix.yml
+

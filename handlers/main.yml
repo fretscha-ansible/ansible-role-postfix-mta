@@ -1,0 +1,24 @@
+---
+
+# handlers file for postfix_mta
+
+- name: import database schema
+  sudo: yes
+  mysql_db:
+    name: vmail
+    state: import
+    target: /tmp/mysql_db_schema.sql
+
+
+- name: reload dovecot config
+  sudo: yes
+  service:
+    name: dovecot
+    state: reloaded
+
+
+- name: reload postfix config
+  sudo: yes
+  service:
+    name: postfix
+    state: reloaded

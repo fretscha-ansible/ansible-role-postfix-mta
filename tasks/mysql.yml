@@ -1,0 +1,89 @@
+#database.yml
+# enspired by https://github.com/Ansibles/mysql
+
+---
+
+- name: main | load the os specific variables
+  sudo: yes
+  include_vars: "{{ansible_os_family | lower}}.yml"
+
+
+- name: MySQL | make sure the MySql packages are installed
+  sudo: yes
+  apt:
+    pkg: "{{item}}"
+    update_cache: yes
+  with_items: mysql_packages
+
+
+- name: MySQL | Ensure MySQL is running
+  sudo: yes
+  service:
+    name: mysql
+    state: started
+
+
+- name: MySQL | set the MySql root password.
+  sudo: yes
+  mysql_user:
+    user: root
+    host: "{{item}}"
+    password: "{{postfix_mta_mysql_root_passwd}}"
+  with_items:
+#   - "{{ansible_hostname}}"
+   - 127.0.0.1
+   - ::1
+   - localhost
+  when: postfix_mta_db == 'mysql'
+
+
+- name: MySQL | configure MySql for easy access as root user
+  sudo: yes
+  template:
+    src: mysql/root_dot_my.cnf
+    dest: ~/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+
+
+- name: MySQL | remove anonymous MySql server user
+  sudo: yes
+  mysql_user:
+    name: ""
+    host: "{{item}}"
+    state: absent
+  with_items:
+    - "{{ansible_hostname}}"
+    - localhost
+
+
+- name: MySQL | remove the MySql test database
+  sudo: yes
+  mysql_db:
+    name: test
+    state: absent
+
+
+- name: MySQL | create user vmail
+  sudo: yes
+  mysql_user:
+    name: vmail
+    password: "{{ postfix_mta_mysql_vmail_passwd }}"
+    priv: "*.*:ALL"
+    state: present
+
+
+- name: MySQL | copy schema
+  sudo: yes
+  template:
+    src: mysql/mysql_db_schema.sql
+    dest: /tmp
+
+
+- name: MySQL | create database
+  sudo: yes
+  mysql_db:
+    name: vmail
+    state: present
+  notify: import database schema

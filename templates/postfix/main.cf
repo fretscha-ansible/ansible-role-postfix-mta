@@ -1,0 +1,60 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+readme_directory = no
+
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = {{ ansible_fqdn }}
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination =
+relayhost =
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+mailbox_size_limit = 0
+message_size_limit = 20000000
+recipient_delimiter = +
+inet_interfaces = all
+
+# TLS parameters
+tls_ssl_options = NO_COMPRESSION
+tls_high_cipherlist = EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!ECDSA:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA
+
+### outgoing connections ###
+{% if postfix_mta_force_tls %}
+smtp_tls_security_level = may
+smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
+smtp_tls_mandatory_ciphers = high
+{% else %}
+smtp_tls_security_level = may
+{% endif %}
+smtp_tls_cert_file = /etc/ssl/certs/ssl-cert-{{ postfix_mta_mx_name }}.pem
+smtp_tls_key_file = /etc/ssl/private/ssl-cert-{{ postfix_mta_mx_name }}.key
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+### incoming connections ###
+{% if postfix_mta_force_tls %}
+smtpd_tls_security_level = encrypt
+smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
+smtpd_tls_mandatory_ciphers = high
+{% else %}
+smtpd_tls_security_level = may
+{% endif %}
+smtpd_tls_cert_file = /etc/ssl/certs/ssl-cert-{{ postfix_mta_mx_name }}.pem
+smtpd_tls_key_file = /etc/ssl/private/ssl-cert-{{ postfix_mta_mx_name }}.key
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtpd_use_tls = yes
+
+### SASL Auth ###
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes

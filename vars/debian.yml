@@ -1,0 +1,17 @@
+#debian.yml
+---
+mysql_packages:
+  - mysql-server
+  - mysql-client
+  - python-mysqldb
+  - dovecot-mysql
+  - postfix-mysql
+
+dovecot_packages:
+  - dovecot-core
+  - dovecot-imapd
+  - dovecot-lmtpd
+
+postfix_packages:
+  - postfix
+

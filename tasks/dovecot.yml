@@ -1,0 +1,97 @@
+
+---
+
+# dovecot tasks file for postfix-mta
+
+- name: dovecot | load the os specific variables
+  sudo: yes
+  include_vars: "{{ansible_os_family | lower}}.yml"
+
+
+- name: dovecot | make sure the dovecot packages are installed
+  sudo: yes
+  apt:
+    pkg: "{{item}}"
+    update_cache: yes
+  with_items: dovecot_packages
+
+
+- name: dovecot | create vmail user
+  sudo: yes
+  user:
+    name: vmail
+
+- name: dovecot | create vmail folder
+  sudo: yes
+  file:
+    path: /var/vmail
+    state: directory
+    owner: vmail
+    group: vmail
+    mode: 0770
+
+- name: dovecot | auth config
+  sudo: yes
+  template:
+    src: dovecot/10-auth.conf
+    dest: /etc/dovecot/conf.d/10-auth.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify: reload dovecot config
+
+- name: dovecot | mail configuration
+  sudo: yes
+  template:
+    src: dovecot/10-mail.conf
+    dest: /etc/dovecot/conf.d/10-mail.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify: reload dovecot config
+
+- name: dovecot | master configuration
+  sudo: yes
+  template:
+    src: dovecot/10-master.conf
+    dest: /etc/dovecot/conf.d/10-master.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify: reload dovecot config
+
+- name: dovecot | ssl configuration
+  sudo: yes
+  template:
+    src: dovecot/10-ssl.conf
+    dest: /etc/dovecot/conf.d/10-ssl.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  notify: reload dovecot config
+
+- name: dovecot | db access configuration
+  sudo: yes
+  template:
+    src: dovecot/dovecot-sql.conf.ext
+    dest: /etc/dovecot/dovecot-sql.conf.ext
+    owner: root
+    group: root
+    mode: 0644
+  when: postfix_mta_db == 'mysql'
+  notify: reload dovecot config
+
+- name: dovecot | general config
+  sudo: yes
+  template:
+    src: dovecot/dovecot.conf
+    dest: /etc/dovecot/dovecot.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload dovecot config
+

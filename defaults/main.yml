@@ -1,0 +1,18 @@
+---
+
+# defaults file for postfix-mta
+
+#mysql_root_passwd: bPM3WYmhyC4DDvTz
+postfix_mta_mysql_root_passwd: bPM3WYmhyC4DDvTz
+
+#mysql_vmail_passwd: XueznHdk8XpMzA2V
+postfix_mta_mysql_vmail_passwd: XueznHdk8XpMzA2V
+
+postfix_mta_db: mysql
+
+postfix_mta_postmaster_address: postmaster@domain.tld
+postfix_mta_mx_name: 'mx.domain.tld'
+
+postfix_mta_cert_passwd: ''
+
+postfix_mta_force_tls: no
