@@ -17,6 +17,7 @@ Next to come (not priorized nor sorted list) :
 * email monitoring & archiving
 * ELK integation (Elasticsearch Logstash Kibana)
 * administration webinterface integration (Django Postfix Admin)
+* DomainKeys Identified Mail (DKIM)
 
 Please feel free to contribute in any form. There is enough space left in the contributors list ;)
 
