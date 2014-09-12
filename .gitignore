@@ -1,0 +1,17 @@
+# Can ignore specific files
+.DS_Store
+
+# Use wildcards as well
+*~
+*.swp
+*.pyc
+*.xml
+*.dump
+*.json
+
+# Can ignore development db
+db.sqlite3
+
+# ignore local/private settings as well
+/local.env
+/private.txt
