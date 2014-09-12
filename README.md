@@ -3,12 +3,23 @@ Postfix MTA
 
 [![Build Status](https://travis-ci.org/fretscha-ansible/ansible-role-postfix-mta.svg?branch=master)](https://travis-ci.org/fretscha-ansible/ansible-role-postfix-mta)
 
-A postfix (mta) mailserver with mysql/pgsql and dovecot mda.
-*Next to come (not ordered list) :
-* Spam and Antivirus
-* Vacation
+A postfix (mta) mailserver with mysql/pgsql and dovecot (mda).
+
+Next to come (not priorized nor sorted list) :
+
+* spam and antivirus
+* vacation
+* mailbox quota per domain & user
+* mailing lists
+* spam avoiding aliases (aliases limited by counter or time)
+* event triggering (BCC, SMS, ... )
+* accounting & thotteling
+* email monitoring & archiving
 * ELK integation (Elasticsearch Logstash Kibana)
-* Postfix administration (Django Postfix Admin)
+* administration webinterface integration (Django Postfix Admin)
+
+Please feel free to contribute in any form. There is enough space left in the contributors list ;)
+
 
 Requirements
 ------------
