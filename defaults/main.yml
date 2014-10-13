@@ -2,6 +2,8 @@
 
 # defaults file for postfix-mta
 
+update_apt_cache: yes
+
 #mysql_root_passwd: bPM3WYmhyC4DDvTz
 postfix_mta_mysql_root_passwd: bPM3WYmhyC4DDvTz
 
