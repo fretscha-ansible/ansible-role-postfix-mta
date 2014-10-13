@@ -2,28 +2,51 @@
 
 ---
 
-- name: pgsql | create role
-  sudo: yes
-  sudo_user: postgres
-  postgresql_user:  name={{ database_user }} password={{ database_userpw }} role_attr_flags=NOSUPERUSER
+- name: pgsql | install PostgreSQL
+  apt:
+    name: {{ item }}
+    update_cache: {{ update_apt_cache }}
+    state: installed
+  with_items:
+    - postgresql
+    - postgresql-contrib
+    - libpq-dev
+    - python-psycopg2
+
+
+- name: pgsql | start postgres
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
 
 
 - name: pgsql | create database
   sudo: yes
   sudo_user: postgres
-  postgresql_db: >
-    name={{ database_dbname }}
-    encoding='UTF-8'
-    lc_collate='en_US.UTF-8'
-    lc_ctype='en_US.UTF-8'
-    template='template0'
+  postgresql_db:
+    name: {{ database_dbname }}
+    encoding: 'UTF-8'
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    template: 'template0'
+    state: present
+
+
+- name: pgsql | create role
+  sudo: yes
+  sudo_user: postgres
+  postgresql_user:
+    name: {{ database_user }}
+    password: {{ database_userpw }}
+    role_attr_flags: "NOSUPERUSER, NOCREATED"
 
 
 - name: pgsql | create Privs
   sudo: yes
   sudo_user: postgres
-  postgresql_privs:  >
-    database={{ database_dbname }}
-    roles={{ database_user }}
-    privs=ALL
-    type=database
+  postgresql_privs:
+    database: {{ database_dbname }}
+    roles: {{ database_user }}
+    privs: ALL
+    type: database

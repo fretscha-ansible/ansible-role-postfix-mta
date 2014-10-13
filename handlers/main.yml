@@ -2,6 +2,13 @@
 
 # handlers file for postfix_mta
 
+- name: restart postgresql
+  sudo: yes
+  service:
+    name: postgresql
+    state: restarted
+    enabled: yes
+
 - name: import database schema
   sudo: yes
   mysql_db:
