@@ -7,7 +7,7 @@
     name: {{ item }}
     update_cache: {{ update_apt_cache }}
     state: installed
-  with_items:
+  with_items: postgres_packages
 
 
 - name: pgsql | start postgres
