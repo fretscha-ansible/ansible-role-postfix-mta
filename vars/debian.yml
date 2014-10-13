@@ -1,11 +1,20 @@
 #debian.yml
 ---
+
 mysql_packages:
   - mysql-server
   - mysql-client
   - python-mysqldb
   - dovecot-mysql
   - postfix-mysql
+
+postgres_packages:
+  - postgresql
+  - postgresql-contrib
+  - libpq-dev
+  - python-psycopg2
+  - dovecot-pgsql
+  - postfix-pgsql
 
 dovecot_packages:
   - dovecot-core
@@ -14,4 +23,3 @@ dovecot_packages:
 
 postfix_packages:
   - postfix
-

@@ -8,10 +8,6 @@
     update_cache: {{ update_apt_cache }}
     state: installed
   with_items:
-    - postgresql
-    - postgresql-contrib
-    - libpq-dev
-    - python-psycopg2
 
 
 - name: pgsql | start postgres

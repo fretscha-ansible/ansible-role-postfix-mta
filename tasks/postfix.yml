@@ -11,7 +11,7 @@
   sudo: yes
   apt:
     pkg: "{{item}}"
-    update_cache: yes
+    update_cache: {{ update_apt_cache }}
   with_items: postfix_packages
 
 - name: postfix | mail configuration
