@@ -1,6 +1,8 @@
 Postfix MTA
 ===========
 
+WARNING : NOT WORKING YET!
+
 [![Build Status](https://travis-ci.org/fretscha-ansible/ansible-role-postfix-mta.svg?branch=master)](https://travis-ci.org/fretscha-ansible/ansible-role-postfix-mta)
 
 A postfix (mta) mailserver with mysql/pgsql and dovecot (mda).
